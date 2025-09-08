@@ -37,5 +37,5 @@ jobs:
     # Runs a single command using the runners shell
     - name: Send greeting
       env:
-        SECRET: ${{ secrets.SECRET }}
-      run: echo "Hello ${{ inputs.name }}. The secret for this env is $SECRET"
+        NAME: ${{ vars.NAME }}
+      run: echo "Hello ${{ inputs.name }}. The secret for this env is $NAME"
