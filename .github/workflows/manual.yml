@@ -8,20 +8,13 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
-        # The data type of the input
-        type: string
       target_env:
         description: 'Select the environment to use'
         default: 'Prod'
         required: true
         type: string
+  schedule:
+    - cron: "0/5 * * * *"
       
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -30,7 +23,7 @@ jobs:
   greet:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: ${{ inputs.target_env }}
+    environment: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.target_env || 'Prod' }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -38,4 +31,4 @@ jobs:
     - name: Send greeting
       env:
         NAME: ${{ vars.NAME }}
-      run: echo "Hello ${{ inputs.name }}. The secret for this env is $NAME"
+      run: echo "The environment for this run is $NAME"
